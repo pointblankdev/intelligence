@@ -53,14 +53,14 @@ export function PromptForm({
         if (!value) return
 
         // sending user prompt to Segment
-        analytics.track({
-          userId: "123",
-          event: "Message Sent",
-          properties: {
-            content: value,
-            conversationId: window.localStorage.getItem('newChatId')
-          }
-        })
+        // analytics.track({
+        //   userId: "123",
+        //   event: "Message Sent",
+        //   properties: {
+        //     content: value,
+        //     conversationId: window.localStorage.getItem('newChatId')
+        //   }
+        // })
 
 
         // Optimistically add user message UI

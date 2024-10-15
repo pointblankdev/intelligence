@@ -50,15 +50,15 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
 
   useEffect(() => {
     setNewChatId(id)
-    if (messages.length === 0) {
-      analytics.track({
-        userId: '123',
-        event: 'Conversation Started',
-        properties: {
-          conversationId: id
-        }
-      })
-    }
+    // if (messages.length === 0) {
+    //   analytics.track({
+    //     userId: '123',
+    //     event: 'Conversation Started',
+    //     properties: {
+    //       conversationId: id
+    //     }
+    //   })
+    // }
   }, [])
 
   useEffect(() => {

@@ -81,15 +81,15 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
       </div>
     )
     // send purchase event to Segment
-    analytics.track({
-      userId: "123",
-      event: "Stock Purchased",
-      properties: {
-        stock_symbol: symbol,
-        amount: amount,
-        total: amount * price
-      }
-    });
+    // analytics.track({
+    //   userId: "123",
+    //   event: "Stock Purchased",
+    //   properties: {
+    //     stock_symbol: symbol,
+    //     amount: amount,
+    //     total: amount * price
+    //   }
+    // });
 
     systemMessage.done(
       <SystemMessage>
@@ -190,14 +190,14 @@ Besides that, you can also chat with users and do some calculations if needed.`
 
       // picking up copilot response and sending into segment
       if (done) {
-        analytics.track({
-          userId: '123',
-          event: 'Message Received',
-          properties: {
-            content,
-            conversationId: aiState.get().chatId,
-          }
-        })
+        // analytics.track({
+        //   userId: '123',
+        //   event: 'Message Received',
+        //   properties: {
+        //     content,
+        //     conversationId: aiState.get().chatId,
+        //   }
+        // })
 
         textStream.done()
         aiState.done({
@@ -237,15 +237,15 @@ Besides that, you can also chat with users and do some calculations if needed.`
           )
 
           // send custom stock list component load to Segment
-          analytics.track({
-            userId: "123",
-            event: "Component Loaded",
-            properties: {
-              type: 'Stock List',
-              stock_list: JSON.stringify(stocks.map(({ symbol, price, delta }) => ({ symbol, price, change: delta }))),
-              conversationId: aiState.get().chatId
-            }
-          });
+          // analytics.track({
+          //   userId: "123",
+          //   event: "Component Loaded",
+          //   properties: {
+          //     type: 'Stock List',
+          //     stock_list: JSON.stringify(stocks.map(({ symbol, price, delta }) => ({ symbol, price, change: delta }))),
+          //     conversationId: aiState.get().chatId
+          //   }
+          // });
 
           await sleep(1000)
 
@@ -288,15 +288,15 @@ Besides that, you can also chat with users and do some calculations if needed.`
             </BotCard>
           )
           // send component load to Segment
-          analytics.track({
-            userId: "123",
-            event: "Component Loaded",
-            properties: {
-              type: 'Stock Price Chart',
-              stock_symbol: symbol,
-              conversationId: aiState.get().chatId
-            }
-          });
+          // analytics.track({
+          //   userId: "123",
+          //   event: "Component Loaded",
+          //   properties: {
+          //     type: 'Stock Price Chart',
+          //     stock_symbol: symbol,
+          //     conversationId: aiState.get().chatId
+          //   }
+          // });
           await sleep(1000)
 
           aiState.done({
@@ -338,15 +338,15 @@ Besides that, you can also chat with users and do some calculations if needed.`
         render: async function* ({ symbol, price, numberOfShares = 100 }) {
 
           // send component load to Segment
-          analytics.track({
-            userId: "123",
-            event: "Component Loaded",
-            properties: {
-              type: 'Stock Purchase Interface',
-              stock_symbol: symbol,
-              conversationId: aiState.get().chatId
-            }
-          });
+          // analytics.track({
+          //   userId: "123",
+          //   event: "Component Loaded",
+          //   properties: {
+          //     type: 'Stock Purchase Interface',
+          //     stock_symbol: symbol,
+          //     conversationId: aiState.get().chatId
+          //   }
+          // });
 
           if (numberOfShares <= 0 || numberOfShares > 1000) {
             aiState.done({
