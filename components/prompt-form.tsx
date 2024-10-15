@@ -51,20 +51,20 @@ export function PromptForm({
         const value = input.trim()
         setInput('')
         if (!value) return
-        
+
         // sending user prompt to Segment
         analytics.track({
           userId: "123",
           event: "Message Sent",
-          properties:{
-            content:value,
+          properties: {
+            content: value,
             conversationId: window.localStorage.getItem('newChatId')
           }
         })
 
-        
+
         // Optimistically add user message UI
-        setMessages(currentMessages => [
+        setMessages((currentMessages: any) => [
           ...currentMessages,
           {
             id: nanoid(),
@@ -74,7 +74,7 @@ export function PromptForm({
 
         // Submit and get response message
         const responseMessage = await submitUserMessage(value)
-        setMessages(currentMessages => [...currentMessages, responseMessage])
+        setMessages((currentMessages: any) => [...currentMessages, responseMessage])
       }}
     >
       <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">

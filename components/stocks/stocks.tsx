@@ -22,13 +22,12 @@ export function Stocks({ props: stocks }: { props: Stock[] }) {
           className="flex cursor-pointer flex-row gap-2 rounded-lg bg-zinc-800 p-2 text-left hover:bg-zinc-700 sm:w-52"
           onClick={async () => {
             const response = await submitUserMessage(`View ${stock.symbol}`)
-            setMessages(currentMessages => [...currentMessages, response])
+            setMessages((currentMessages: any) => [...currentMessages, response])
           }}
         >
           <div
-            className={`text-xl ${
-              stock.delta > 0 ? 'text-green-600' : 'text-red-600'
-            } flex w-11 flex-row justify-center rounded-md bg-white/10 p-2`}
+            className={`text-xl ${stock.delta > 0 ? 'text-green-600' : 'text-red-600'
+              } flex w-11 flex-row justify-center rounded-md bg-white/10 p-2`}
           >
             {stock.delta > 0 ? '↑' : '↓'}
           </div>
@@ -38,16 +37,14 @@ export function Stocks({ props: stocks }: { props: Stock[] }) {
           </div>
           <div className="ml-auto flex flex-col">
             <div
-              className={`${
-                stock.delta > 0 ? 'text-green-600' : 'text-red-600'
-              } bold text-right uppercase`}
+              className={`${stock.delta > 0 ? 'text-green-600' : 'text-red-600'
+                } bold text-right uppercase`}
             >
               {` ${((stock.delta / stock.price) * 100).toFixed(2)}%`}
             </div>
             <div
-              className={`${
-                stock.delta > 0 ? 'text-green-700' : 'text-red-700'
-              } text-right text-base`}
+              className={`${stock.delta > 0 ? 'text-green-700' : 'text-red-700'
+                } text-right text-base`}
             >
               {stock.delta}
             </div>

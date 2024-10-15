@@ -44,7 +44,8 @@ const openai = new OpenAI({
 async function confirmPurchase(symbol: string, price: number, amount: number) {
   'use server'
 
-  const aiState = getMutableAIState<typeof AI>()
+  // const aiState = getMutableAIState<typeof AI>()
+  const aiState = getMutableAIState()
 
   const purchasing = createStreamableUI(
     <div className="inline-flex items-start gap-1 md:items-center">
@@ -79,16 +80,16 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
         </p>
       </div>
     )
-      // send purchase event to Segment
-      analytics.track({
-        userId: "123",
-        event: "Stock Purchased",
-        properties: {
-          stock_symbol: symbol,
-          amount: amount,
-          total: amount*price
-        }
-      });
+    // send purchase event to Segment
+    analytics.track({
+      userId: "123",
+      event: "Stock Purchased",
+      properties: {
+        stock_symbol: symbol,
+        amount: amount,
+        total: amount * price
+      }
+    });
 
     systemMessage.done(
       <SystemMessage>
@@ -115,9 +116,8 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
         {
           id: nanoid(),
           role: 'system',
-          content: `[User has purchased ${amount} shares of ${symbol} at ${price}. Total cost = ${
-            amount * price
-          }]`
+          content: `[User has purchased ${amount} shares of ${symbol} at ${price}. Total cost = ${amount * price
+            }]`
         }
       ]
     })
@@ -135,7 +135,8 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
 async function submitUserMessage(content: string) {
   'use server'
 
-  const aiState = getMutableAIState<typeof AI>()
+  // const aiState = getMutableAIState<typeof AI>()
+  const aiState = getMutableAIState()
 
   aiState.update({
     ...aiState.get(),
@@ -235,16 +236,16 @@ Besides that, you can also chat with users and do some calculations if needed.`
             </BotCard>
           )
 
-        // send custom stock list component load to Segment
-        analytics.track({
-          userId: "123",
-          event: "Component Loaded",
-          properties: {
-            type: 'Stock List',
-            stock_list: JSON.stringify(stocks.map(({ symbol, price, delta }) => ({ symbol, price, change: delta }))),
-            conversationId: aiState.get().chatId
-          }
-        });
+          // send custom stock list component load to Segment
+          analytics.track({
+            userId: "123",
+            event: "Component Loaded",
+            properties: {
+              type: 'Stock List',
+              stock_list: JSON.stringify(stocks.map(({ symbol, price, delta }) => ({ symbol, price, change: delta }))),
+              conversationId: aiState.get().chatId
+            }
+          });
 
           await sleep(1000)
 
@@ -286,16 +287,16 @@ Besides that, you can also chat with users and do some calculations if needed.`
               <StockSkeleton />
             </BotCard>
           )
-        // send component load to Segment
-        analytics.track({
-          userId: "123",
-          event: "Component Loaded",
-          properties: {
-            type: 'Stock Price Chart',
-            stock_symbol: symbol,
-            conversationId: aiState.get().chatId
-          }
-        });
+          // send component load to Segment
+          analytics.track({
+            userId: "123",
+            event: "Component Loaded",
+            properties: {
+              type: 'Stock Price Chart',
+              stock_symbol: symbol,
+              conversationId: aiState.get().chatId
+            }
+          });
           await sleep(1000)
 
           aiState.done({
@@ -336,16 +337,16 @@ Besides that, you can also chat with users and do some calculations if needed.`
         }),
         render: async function* ({ symbol, price, numberOfShares = 100 }) {
 
-        // send component load to Segment
-        analytics.track({
-          userId: "123",
-          event: "Component Loaded",
-          properties: {
-            type: 'Stock Purchase Interface',
-            stock_symbol: symbol,
-            conversationId: aiState.get().chatId
-          }
-        });
+          // send component load to Segment
+          analytics.track({
+            userId: "123",
+            event: "Component Loaded",
+            properties: {
+              type: 'Stock Purchase Interface',
+              stock_symbol: symbol,
+              conversationId: aiState.get().chatId
+            }
+          });
 
           if (numberOfShares <= 0 || numberOfShares > 1000) {
             aiState.done({
@@ -378,18 +379,17 @@ Besides that, you can also chat with users and do some calculations if needed.`
                 })
               }
             ]
-            
+
           })
 
           return (
             <>
               <BotMessage
                 content={`Sure!
-                ${
-                  typeof numberOfShares === 'number'
+                ${typeof numberOfShares === 'number'
                     ? `Click the button below to purchase ${numberOfShares} shares of $${symbol}:`
                     : `How many $${symbol} would you like to purchase?`
-                }`}
+                  }`}
               />
 
               <Purchase
@@ -478,7 +478,8 @@ export type UIState = {
   display: React.ReactNode
 }[]
 
-export const AI = createAI<AIState, UIState>({
+// export const AI = createAI<AIState, UIState>({
+export const AI: any = ({
   actions: {
     submitUserMessage,
     confirmPurchase
@@ -494,14 +495,14 @@ export const AI = createAI<AIState, UIState>({
       const aiState = getAIState()
 
       if (aiState) {
-        const uiState = getUIStateFromAIState(aiState)
+        const uiState = getUIStateFromAIState(aiState as Chat)
         return uiState
       }
     } else {
       return
     }
   },
-  unstable_onSetAIState: async ({ state }) => {
+  unstable_onSetAIState: async ({ state }: { state: AIState }) => {
     'use server'
 
     const session = await auth()
