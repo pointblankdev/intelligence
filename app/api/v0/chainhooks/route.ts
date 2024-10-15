@@ -1,3 +1,5 @@
+import { handleEvent } from "@/lib/events/dispatcher";
+
 // Main payload structure
 interface ChainhookPayload {
     apply: ApplyEvent[];
@@ -56,8 +58,8 @@ export async function POST(request: Request) {
                     // builder.setThumbnail({ url: 'https://charisma.rocks/dmg-logo.gif' })
 
                     for (const event of tx.metadata.receipt.events) {
-                        // builder = await handleContractEvent(event, builder)
                         console.log(event)
+                        await handleEvent(event)
                     }
 
                     // hook.addEmbed(builder.getEmbed());
