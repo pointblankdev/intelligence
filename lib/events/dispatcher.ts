@@ -1,55 +1,65 @@
 import analytics from "@/app/analyticsInstance"
 
 export const handleEvent = async (event: any) => {
+    switch (event.type) {
+        case 'STXTransferEvent':
+            analytics.track({
+                userId: event.data.sender,
+                event: 'STX Transferred',
+                properties: event.data
+            });
+            break;
 
+        case 'FTTransferEvent':
+            analytics.track({
+                userId: event.data.sender,
+                event: 'Fungible Token Transferred',
+                properties: event.data
+            });
+            break;
 
-    if (event.type === 'STXTransferEvent') {
+        case 'FTMintEvent':
+            analytics.track({
+                userId: event.data.recipient,
+                event: 'Fungible Token Minted',
+                properties: event.data
+            });
+            break;
 
-    }
+        case 'FTBurnEvent':
+            // Add logic for FTBurnEvent
+            break;
 
-    else if (event.type === 'FTTransferEvent') {
-        analytics.track({
-            userId: event.data.sender,
-            event: 'Fungible Token Transferred',
-            properties: event.data
-        })
-    }
+        case 'NFTTransferEvent':
+            // Add logic for NFTTransferEvent
+            break;
 
-    else if (event.type === 'FTMintEvent') {
-        analytics.track({
-            userId: event.data.recipient,
-            event: 'Fungible Token Minted',
-            properties: event.data
-        })
-    }
+        case 'NFTMintEvent':
+            // Add logic for NFTMintEvent
+            break;
 
-    else if (event.type === 'FTBurnEvent') {
-        // analytics.track({
-        //     userId: event.data.recipient,
-        //     event: 'Fungible Token Burned',
-        //     properties: event.data
-        // })
-    }
+        case 'NFTBurnEvent':
+            // Add logic for NFTBurnEvent
+            break;
 
-    else if (event.type === 'NFTTransferEvent') {
+        case 'SmartContractEvent':
+            let userId;
+            switch (event.data.contract_identifier) {
+                case 'SP2ZNGJ85ENDY6QRHQ5P2D4FXKGZWCKTB2T0Z55KS.univ2-core':
+                    userId = event.data.value.user
+                    break;
+                default:
+                    break;
+            }
+            analytics.track({
+                userId,
+                event: 'Smart Contract Printed',
+                properties: event.data
+            });
+            break;
 
-    }
-
-    else if (event.type === 'NFTMintEvent') {
-
-    }
-
-    else if (event.type === 'NFTBurnEvent') {
-
-    }
-
-    else if (event.type === 'SmartContractEvent') {
-
-
-    }
-
-    else {
-
-
+        default:
+            // Add logic for unknown event types
+            break;
     }
 }
